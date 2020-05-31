@@ -1,0 +1,14 @@
+canvas {
+    border: 1px solid green;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.search_result {
+    position: relative;
+    z-index: 2;
+    opacity: 1.0;
+    width: 300px;
+}

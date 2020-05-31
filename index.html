@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID19 API</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container p-3 my-3">
+        <div id="app">
+            <div class="d-flex justify-content-center">
+                <h3>COVID19国別感染者数</h3>
+            </div>
+            <div class="d-flex justify-content-center py-3">
+                <h5>全世界（{{ summary['Date'] }})</h5>
+            </div>
+            <div class="py-3">
+                <div class="d-flex justify-content-center">
+                    <div class="w-50">
+                        <div>
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="text-center"></th>
+                                        <th class="text-center">新規</th>
+                                        <th class="text-center">累計</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <thead class="thead-light">
+                                        <th class="text-center">感染者数</th>
+                                        <td class="text-right">{{ global_summary['NewConfirmed'] }}</td>
+                                        <td class="text-right">{{ global_summary['TotalConfirmed'] }}</td>
+                                    </thead>
+                                </tr>
+                                <tr>
+                                    <thead class="thead-light">
+                                        <th class="text-center">死者数</th>
+                                        <td class="text-right">{{ global_summary['NewDeaths'] }}</td>
+                                        <td class="text-right">{{ global_summary['TotalDeaths'] }}</td>
+                                    </thead>
+                                </tr>
+                                <tr>
+                                    <thead class="thead-light">
+                                        <th class="text-center">回復者</th>
+                                        <td class="text-right">{{ global_summary['NewRecovered'] }}</td>
+                                        <td class="text-right">{{ global_summary['TotalRecovered'] }}</td>
+                                    </thead>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    
+                    
+                    
+                </div>
+            </div>
+            <div class="d-flex justify-content-center py-3">
+                <h5>各国または地域</h5>
+            </div>
+
+            <div>
+                <div class="d-flex justify-content-center">
+                    <div class="px-2">
+                        <input type="text" v-model="search_word" @input="searchCountry" placeholder="search"></input>
+                    </div>
+                    <div class="px-2">
+                        <!-- The Modal -->
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">
+                            Country List
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center py-3">
+                    <div v-if="search_word != ''" class="search_result bg-white">
+                        <div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <template v-for="(value, index) in candidates">
+                                        <tr v-if="index < 20" @click="additem(value['Slug'])">
+                                            <td>
+                                                <p>{{ value['Country'] }}</p>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                
+                
+                
+            </div>
+              
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    
+                    <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Country List</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        
+                        <!-- Modal body -->
+                        <div class="modal-body overflow-auto">
+                            <div class="d-flex justify-content-center h-50">
+                                <div>
+                                    <div v-for="item in countries" v-cloak>
+                                        <a href="#" @click="additem(item['Slug'])"> {{ item['Country'] }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            
+            <div v-for="(row_data,index) in selected_country_data">
+                <div class="row py-3">
+                    <template v-for="(data,index) in row_data">
+                        <div class="col">
+                            <template v-if="data != ''">
+                                <div class="card">
+                                    
+                                    <div class="card-header">{{ data['Country']}}
+                                        <button type="button" class="close" @click="removeCountry(data['Slug'])">&times;</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <tr>
+                                                <th></th>
+                                                <th>新規</th>
+                                                <th>累計</th>
+                                            </tr>
+                                            <tr>
+                                                <th>感染者数</th>
+                                                <td class="text-right">{{ data['NewConfirmed'] }}</td>
+                                                <td class="text-right">{{ data['TotalConfirmed'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>死者数</th>
+                                                <td class="text-right">{{ data['NewDeaths'] }}</td>
+                                                <td class="text-right">{{ data['TotalDeaths'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>回復者</th>
+                                                <td class="text-right">{{ data['NewRecovered'] }}</td>
+                                                <td class="text-right">{{ data['TotalRecovered'] }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                   
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+                
+                    
+
+
+
+
+                
+                
+
+            </div>
+        </div>     
+    <div>
+
+  </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
